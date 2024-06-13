@@ -99,7 +99,7 @@ namespace ariel{
         for (size_t i = 0; i < n_other; ++i) {
             for (size_t j = 0; j < n_other; ++j) {
                 // Check if any edge in other is not present in this
-                if (other.adjacencyMatrix[i][j] && !adjacencyMatrix[i][j]) {
+                if (adjacencyMatrix[i][j] != other.adjacencyMatrix[i][j]) {
                     return false;
                 }
             }
@@ -111,133 +111,129 @@ namespace ariel{
 
     //----------- Add -------------
 
-    ariel::Graph Graph:: operator+(const ariel::Graph& other) {
-        size_t n = this-> adjacencyMatrix.size();
-        if (n != other.adjacencyMatrix.size())
-        {
-            throw std::invalid_argument("Both of the matrix should be in the same size !");
+    ariel::Graph Graph::operator+(const ariel::Graph& other) const {
+        size_t n = this->adjacencyMatrix.size();
+        // Check if matrices have the same size
+        if (n != other.adjacencyMatrix.size()) {
+            throw std::invalid_argument("Both of the matrices should be the same size!");
             return *this;
-
         }
 
+        // Initialize result matrix
         std::vector<std::vector<int>> result(n, std::vector<int>(n, 0));
-        for (size_t i = 0; i < n; i++)
-        {
-            for (size_t j = 0; j < n; j++)
-            {
+        // Add corresponding elements of adjacency matrices
+        for (size_t i = 0; i < n; i++) {
+            for (size_t j = 0; j < n; j++) {
                 result[i][j] += this->adjacencyMatrix[i][j] + other.adjacencyMatrix[i][j];
             }
-            
         }
+
+        // Create a new graph with the resulting matrix
         Graph res;
         res.loadGraph(result);
 
         return res;
     }
-    ariel::Graph Graph::  operator+(){return *this;}
 
-
-    ariel::Graph Graph:: operator+=(const ariel::Graph& other) {
-        size_t n = this-> adjacencyMatrix.size();
-        if (n != other.adjacencyMatrix.size())
-        {
-            throw std::invalid_argument("Both of the matrix should be in the same size !");
-            return *this;
-
-        }
-        for (size_t i = 0; i < n; i++)
-        {
-            for (size_t j = 0; j < n; j++)
-            {
-                this->adjacencyMatrix[i][j] += other.adjacencyMatrix[i][j];
-            }
-            
-        }
+    ariel::Graph Graph::operator+() {
         return *this;
     }
 
+    ariel::Graph Graph::operator+=(const ariel::Graph& other) {
+        size_t n = this->adjacencyMatrix.size();
+        // Check if matrices have the same size
+        if (n != other.adjacencyMatrix.size()) {
+            throw std::invalid_argument("Both of the matrices should be the same size!");
+            return *this;
+        }
+
+        // Add corresponding elements of adjacency matrices in place
+        for (size_t i = 0; i < n; i++) {
+            for (size_t j = 0; j < n; j++) {
+                this->adjacencyMatrix[i][j] += other.adjacencyMatrix[i][j];
+            }
+        }
+        return *this;
+    }
 
     //----------- Sub -------------
 
-
-    ariel::Graph Graph:: operator-(const ariel::Graph& other) {
-        size_t n = this-> adjacencyMatrix.size();
-        if (n != other.adjacencyMatrix.size())
-        {
-            throw std::invalid_argument("Both of the matrix should be in the same size !");
+    ariel::Graph Graph::operator-(const ariel::Graph& other) const {
+        size_t n = this->adjacencyMatrix.size();
+        // Check if matrices have the same size
+        if (n != other.adjacencyMatrix.size()) {
+            throw std::invalid_argument("Both of the matrices should be the same size!");
             return *this;
         }
 
+        // Initialize result matrix
         std::vector<std::vector<int>> result(n, std::vector<int>(n, 0));
-        for (size_t i = 0; i < n; i++)
-        {
-            for (size_t j = 0; j < n; j++)
-            {
+        // Subtract corresponding elements of adjacency matrices
+        for (size_t i = 0; i < n; i++) {
+            for (size_t j = 0; j < n; j++) {
                 result[i][j] += this->adjacencyMatrix[i][j] - other.adjacencyMatrix[i][j];
             }
-            
         }
+
+        // Create a new graph with the resulting matrix
         Graph res;
         res.loadGraph(result);
 
         return res;
     }
-    ariel::Graph Graph:: operator-=(const ariel::Graph& other) {
-        size_t n = this-> adjacencyMatrix.size();
-        if (n != other.adjacencyMatrix.size())
-        {
-            throw std::invalid_argument("Both of the matrix should be in the same size !");
+
+    ariel::Graph Graph::operator-=(const ariel::Graph& other) {
+        size_t n = this->adjacencyMatrix.size();
+        // Check if matrices have the same size
+        if (n != other.adjacencyMatrix.size()) {
+            throw std::invalid_argument("Both of the matrices should be the same size!");
             return *this;
         }
-        for (size_t i = 0; i < n; i++)
-        {
-            for (size_t j = 0; j < n; j++)
-            {
+
+        // Subtract corresponding elements of adjacency matrices in place
+        for (size_t i = 0; i < n; i++) {
+            for (size_t j = 0; j < n; j++) {
                 this->adjacencyMatrix[i][j] -= other.adjacencyMatrix[i][j];
             }
-            
         }
         return *this;
     }
 
-    ariel::Graph Graph:: operator-(){
-        size_t n = this-> adjacencyMatrix.size();
-        for (size_t i = 0; i < n; i++)
-        {
-            for (size_t j = 0; j < n; j++)
-            {
+    ariel::Graph Graph::operator-() {
+        size_t n = this->adjacencyMatrix.size();
+        // Negate each element of the adjacency matrix
+        for (size_t i = 0; i < n; i++) {
+            for (size_t j = 0; j < n; j++) {
                 this->adjacencyMatrix[i][j] *= -1;
             }
-            
         }
         return *this;
     }
-
 
     //----------- Mul -------------
 
-
-    ariel::Graph Graph:: operator*=(const int c) {
-        size_t n = this-> adjacencyMatrix.size();
-        for (size_t i = 0; i < n; i++)
-        {
-            for (size_t j = 0; j < n; j++)
-            {
+    ariel::Graph Graph::operator*=(const int c) {
+        size_t n = this->adjacencyMatrix.size();
+        // Multiply each element of the adjacency matrix by c
+        for (size_t i = 0; i < n; i++) {
+            for (size_t j = 0; j < n; j++) {
                 this->adjacencyMatrix[i][j] *= c;
             }
-            
         }
         return *this;
     }
 
-    ariel::Graph Graph:: operator*(const ariel::Graph& other){
-        size_t n = this-> adjacencyMatrix.size();
-        if (n != other.adjacencyMatrix.size())
-        {
-            throw std::invalid_argument("Both of the matrix should be in the same size !");
+    ariel::Graph Graph::operator*(const ariel::Graph& other) const {
+        size_t n = this->adjacencyMatrix.size();
+        // Check if matrices have the same size
+        if (n != other.adjacencyMatrix.size()) {
+            throw std::invalid_argument("Both of the matrices should be the same size!");
             return *this;
         }
+
+        // Initialize result matrix
         std::vector<std::vector<int>> result(n, std::vector<int>(n, 0));
+        // Perform matrix multiplication
         for (size_t i = 0; i < n; ++i) {
             for (size_t j = 0; j < n; ++j) {
                 for (size_t k = 0; k < n; ++k) {
@@ -245,50 +241,46 @@ namespace ariel{
                 }
             }
         }
+
+        // Create a new graph with the resulting matrix
         Graph res;
         res.loadGraph(result);
 
         return res;
-
     }
-
 
     //-------- Div ----------
 
-
-    ariel::Graph Graph:: operator/=(const int c) {
-        if(c == 0){
-            throw std::invalid_argument("Can't divide by zero !");
+    ariel::Graph Graph::operator/=(const int c) {
+        // Check for division by zero
+        if (c == 0) {
+            throw std::invalid_argument("Can't divide by zero!");
             return *this;
-
         }
-        size_t n = this-> adjacencyMatrix.size();
-        for (size_t i = 0; i < n; i++)
-        {
-            for (size_t j = 0; j < n; j++)
-            {
+
+        size_t n = this->adjacencyMatrix.size();
+        // Divide each element of the adjacency matrix by c
+        for (size_t i = 0; i < n; i++) {
+            for (size_t j = 0; j < n; j++) {
                 this->adjacencyMatrix[i][j] /= c;
             }
-            
         }
         return *this;
     }
-
-
-
 
     // --------- output -----------
 
     std::ostream &operator<<(std::ostream &os, const Graph &graph) {
         size_t n = graph.getAdjacencyMatrix().size();
+        // Handle empty matrix case
         if (n == 0) {
             os << "[]";
             return os;
         }
 
+        // Print the adjacency matrix
         for (size_t i = 0; i < n; i++) {
             os << "[";
-
             for (size_t j = 0; j < n - 1; j++) {
                 os << graph.getAdjacencyMatrix()[i][j] << ", ";
             }
@@ -300,150 +292,124 @@ namespace ariel{
 
     // ------- Comparison ---------
 
-    bool ariel::Graph::operator==(const ariel::Graph &other) const{
-        size_t n = this-> adjacencyMatrix.size();
-        if (n != other.adjacencyMatrix.size())
-        {
-            return false;
-        }
-         for (size_t i = 0; i < n; i++)
-        {
-            for (size_t j = 0; j < n; j++)
-            {
-                if(this->adjacencyMatrix[i][j] != other.adjacencyMatrix[i][j]){
-                    return false;
-                }
-            }
-            
-        }
-        return true;
-    }
-
-    bool ariel::Graph::operator>=(const ariel::Graph &other) const{
-
-        if(*this == other){
-            return true;
-        }
-        size_t n_this = this->adjacencyMatrix.size();
-        size_t n_other = other.adjacencyMatrix.size();
-        
+    bool ariel::Graph::operator>(const ariel::Graph &other) const {
+        // Compare if this graph contains the other graph
         if (this->contains(other)) {
             return true;
         }
 
-        if (this->numOfEdegs() != other.numOfEdegs()) {
-            return this->numOfEdegs() >= other.numOfEdegs();
-        }
-
-        return other.adjacencyMatrix.size() > adjacencyMatrix.size();
-
-    }
-
-    bool ariel::Graph::operator<=(const ariel::Graph &other) const{
-
-        if(*this == other){
+        // Compare by number of edges
+        if (this->numOfEdegs() > other.numOfEdegs()) {
             return true;
         }
-        size_t n_this = this->adjacencyMatrix.size();
-        size_t n_other = other.adjacencyMatrix.size();
-        
+
+        // Compare by adjacency matrix size
+        if (this->adjacencyMatrix.size() > other.adjacencyMatrix.size()) {
+            return true;
+        }
+
+        return false;
+    }
+
+    bool ariel::Graph::operator<(const ariel::Graph &other) const {
+        // Compare if the other graph contains this graph
         if (other.contains(*this)) {
             return true;
         }
 
-        if (this->numOfEdegs() != other.numOfEdegs()) {
-            return this->numOfEdegs() <= other.numOfEdegs();
+        // Compare by number of edges
+        if (other.numOfEdegs() > this->numOfEdegs()) {
+            return true;
         }
 
-        return other.adjacencyMatrix.size() < adjacencyMatrix.size();
+        // Compare by adjacency matrix size
+        if (other.adjacencyMatrix.size() > this->adjacencyMatrix.size()) {
+            return true;
+        }
+
+        return false;
     }
 
-    bool ariel::Graph::operator>(const ariel::Graph &other) const{
-        if(!(*this <= other)){
+    bool ariel::Graph::operator==(const ariel::Graph &other) const {
+        // Check if neither graph is greater or less than the other
+        if (!(*this > other) && !(*this < other)) {
             return true;
         }
         return false;
     }
 
-    bool ariel::Graph::operator<(const ariel::Graph &other) const{
-        if(!(*this >= other)){
+    bool ariel::Graph::operator>=(const ariel::Graph &other) const {
+        // Check if this graph is not less than the other
+        if (!(*this < other)) {
             return true;
         }
         return false;
     }
 
+    bool ariel::Graph::operator<=(const ariel::Graph &other) const {
+        // Check if this graph is not greater than the other
+        if (!(*this > other)) {
+            return true;
+        }
+        return false;
+    }
 
+    // ------- Prefix ---------
 
-    // ------- prefix ---------
-
-    ariel::Graph& Graph :: operator++(){
+    ariel::Graph& Graph::operator++() {
         size_t n = this->getAdjacencyMatrix().size();
-        for (size_t i = 0; i < n; i++)
-        {
-            for (size_t j = 0; j < n; j++)
-            {
-                if(this->adjacencyMatrix[i][j]!=0){
+        // Increment each non-zero element of the adjacency matrix
+        for (size_t i = 0; i < n; i++) {
+            for (size_t j = 0; j < n; j++) {
+                if (this->adjacencyMatrix[i][j] != 0) {
                     this->adjacencyMatrix[i][j] += 1;
                 }
             }
-            
         }
         return *this;
-        
     }
-    ariel::Graph& Graph :: operator--(){
+
+    ariel::Graph& Graph::operator--() {
         size_t n = this->getAdjacencyMatrix().size();
-        for (size_t i = 0; i < n; i++)
-        {
-            for (size_t j = 0; j < n; j++)
-            {
-                if(this->adjacencyMatrix[i][j]!=0){
+        // Decrement each non-zero element of the adjacency matrix
+        for (size_t i = 0; i < n; i++) {
+            for (size_t j = 0; j < n; j++) {
+                if (this->adjacencyMatrix[i][j] != 0) {
                     this->adjacencyMatrix[i][j] -= 1;
                 }
             }
-            
         }
         return *this;
-        
     }
 
-    
-    // -------- postfix ---------
+    // -------- Postfix ---------
 
-    ariel::Graph Graph :: operator++(int){
+    ariel::Graph Graph::operator++(int) {
         Graph tmp = *this;
         size_t n = this->getAdjacencyMatrix().size();
-        for (size_t i = 0; i < n; i++)
-        {
-            for (size_t j = 0; j < n; j++)
-            {
-                if(this->adjacencyMatrix[i][j]!=0){
+        // Increment each non-zero element of the adjacency matrix
+        for (size_t i = 0; i < n; i++) {
+            for (size_t j = 0; j < n; j++) {
+                if (this->adjacencyMatrix[i][j] != 0) {
                     this->adjacencyMatrix[i][j] += 1;
                 }
             }
-            
         }
-
         return tmp;
-        
     }
 
-    ariel::Graph Graph :: operator--(int){
+    ariel::Graph Graph::operator--(int) {
         Graph tmp = *this;
         size_t n = this->getAdjacencyMatrix().size();
-        for (size_t i = 0; i < n; i++)
-        {
-            for (size_t j = 0; j < n; j++)
-            {
-                if(this->adjacencyMatrix[i][j]!=0){
+        // Decrement each non-zero element of the adjacency matrix
+        for (size_t i = 0; i < n; i++) {
+            for (size_t j = 0; j < n; j++) {
+                if (this->adjacencyMatrix[i][j] != 0) {
                     this->adjacencyMatrix[i][j] -= 1;
                 }
             }
-            
         }
-
         return tmp;
-        
     }
 
 
