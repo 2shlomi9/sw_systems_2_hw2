@@ -41,16 +41,16 @@ namespace ariel {
             //------- Operators -------
 
             //add
-            Graph operator+(const Graph& other);
+            Graph operator+(const Graph& other) const;
             Graph operator+=(const Graph& other);
             Graph operator+();
             //sub
-            Graph operator-(const Graph& other);
+            Graph operator-(const Graph& other) const;
             Graph operator-=(const Graph& other);
             Graph operator-();
             //mul
             Graph operator*=(const int c);
-            Graph operator*(const Graph& other);
+            Graph operator*(const Graph& other) const;
             //div
             Graph operator/=(const int c);
 
@@ -66,12 +66,12 @@ namespace ariel {
             friend std::ostream &operator <<(std::ostream &os, const Graph &graph);
 
             //prefix
-            Graph& operator++();
-            Graph& operator--();
+            Graph& operator++(); // ++g
+            Graph& operator--(); // --g
 
             //postfix
-            Graph operator++(int);
-            Graph operator--(int);
+            Graph operator++(int); // g++
+            Graph operator--(int); // g--
 
     };
 
